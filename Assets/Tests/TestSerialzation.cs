@@ -1,28 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using NUnit.Framework;
-using UnityEngine;
-using UnityEngine.TestTools;
+﻿using NUnit.Framework;
+using WGPackages.JsonWrapperForUnity;
+using WGUnityPackages.JsonWrapperForUnity.Tests;
 
-namespace Tests
+public class TestSerialzation
 {
-    public class TestSerialzation
+    // A Test behaves as an ordinary method
+    [Test]
+    public void TestSerialzationSimplePasses()
     {
-        // A Test behaves as an ordinary method
-        [Test]
-        public void TestSerialzationSimplePasses()
-        {
-            
-        }
+        Fruit fruit = new Fruit () {plantName ="some fruit", tasteValue = 2f };
+        
+        Assert.IsInstanceOf<Plant> (fruit, "fruit is not plant");
 
-        // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
-        // `yield return null;` to skip a frame.
-        [UnityTest]
-        public IEnumerator TestSerialzationWithEnumeratorPasses()
-        {
-            // Use the Assert class to test conditions.
-            // Use yield to skip a frame.
-            yield return null;
-        }
+        string fruitPath = BaseSerializer.SaveToJson<Fruit> ( fruit, fruit.plantName, @"Tests/Plants", overwrite: true );
+
+        var loaded = BaseSerializer.LoadFromJson ( fruitPath );
+
+        Assert.IsInstanceOf<Fruit> (loaded, "loaded is not fruit");
+        Assert.AreEqual ( (loaded as Fruit).plantName, "some fruit", message:"Deserialized fruit has wrong name: " + ( loaded as Fruit ).plantName );
     }
 }
