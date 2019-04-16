@@ -41,6 +41,12 @@ namespace WGPackages.JsonWrapperForUnity
             return Application.dataPath + Path.DirectorySeparatorChar + pathRoot;
         }
 
+        private static bool TryToMakePath ( string pathRoot )
+        {
+            var newDir = Directory.CreateDirectory ( pathRoot );
+            return true;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -56,8 +62,10 @@ namespace WGPackages.JsonWrapperForUnity
             if ( File.Exists ( path ) && !overwrite )
                 throw new System.FormatException ( "File Exists! Use Overwrite parameter!" );
 
+            TryToMakePath ( GetDirectoryPath ( pathRoot ) );
+
             if ( !Directory.Exists ( GetDirectoryPath ( pathRoot ) ) )
-                throw new System.FormatException ( "Directory does not exist!" );
+                throw new System.FormatException ( "Directory does not exist!"+ GetDirectoryPath ( pathRoot ) );
 
             string json = JsonConvert.SerializeObject ( objectToSerialize, SERIALIZER_SETTINGS );
             var stream = new FileStream ( path, FileMode.Create );
