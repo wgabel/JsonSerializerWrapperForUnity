@@ -41,6 +41,7 @@ namespace WGPackages.JsonWrapperForUnity
             return Application.dataPath + Path.DirectorySeparatorChar + pathRoot;
         }
 
+        //TODO : Fix this
         private static bool TryToMakePath ( string pathRoot )
         {
             var newDir = Directory.CreateDirectory ( pathRoot );
@@ -68,6 +69,7 @@ namespace WGPackages.JsonWrapperForUnity
                 throw new System.FormatException ( "Directory does not exist!"+ GetDirectoryPath ( pathRoot ) );
 
             string json = JsonConvert.SerializeObject ( objectToSerialize, SERIALIZER_SETTINGS );
+            // TODO : Use using
             var stream = new FileStream ( path, FileMode.Create );
             byte[] info = new UTF8Encoding ( true ).GetBytes ( json );
             stream.Write ( info, 0, info.Length );
@@ -90,7 +92,7 @@ namespace WGPackages.JsonWrapperForUnity
 
             if ( !File.Exists ( path ) )
                 throw new System.FormatException ( "Path is not a file!" );
-
+            //TODO : Use using
             var stream = new FileStream ( path, FileMode.Open );
             TextReader tr = new StreamReader ( stream );
             var deserializedProduct = JsonConvert.DeserializeObject ( tr.ReadToEnd (), SERIALIZER_SETTINGS );
