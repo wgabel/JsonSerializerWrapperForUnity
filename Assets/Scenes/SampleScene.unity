@@ -163,3 +163,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16d9e86ce5669654194714ddbde11b7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  path: \Tests\Plants2\\
