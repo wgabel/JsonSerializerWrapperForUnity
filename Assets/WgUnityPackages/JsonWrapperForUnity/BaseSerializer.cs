@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.IO;
 using System.Text;
 #if UNITY_EDITOR
@@ -6,7 +7,7 @@ using UnityEditor;
 #endif
 using UnityEngine;
 
-namespace WGPackages.JsonWrapperForUnity
+namespace WGUnityPackages.JsonWrapperForUnity
 {
     /// <summary>
     /// Basic Json Serializer
@@ -26,26 +27,28 @@ namespace WGPackages.JsonWrapperForUnity
         /// <param name="fileUniqueNamePart"></param>
         /// <param name="pathRoot"></param>
         /// <returns></returns>
-        private static string GetPath<T> ( string fileUniqueNamePart, string pathRoot = "" )
+        private static string GetPath<T> ( 
+            string aditionalPath, 
+            string fileUniqueNamePart )
         {
-            return GetDirectoryPath ( pathRoot ) + Path.DirectorySeparatorChar + typeof ( T ) + "_" + fileUniqueNamePart + ".json";
+                return RelativeDirectoryPath ( aditionalPath ) + 
+                typeof ( T ) + "_" + fileUniqueNamePart + ".json";
         }
-           
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="pathRoot"></param>
-        /// <returns></returns>
-        private static string GetDirectoryPath ( string pathRoot )
+
+        private static string RelativeDirectoryPath ( string aditionalPath )
         {
-            return Application.dataPath + Path.DirectorySeparatorChar + pathRoot;
+            var ap = Application.dataPath;
+            return  ap + "/" + aditionalPath+"/";
         }
 
         //TODO : Fix this
-        private static bool TryToMakePath ( string pathRoot )
+        private static bool TryToMakePathDirectory ( 
+            string path, 
+            out string createdPath )
         {
-            var newDir = Directory.CreateDirectory ( pathRoot );
-            return true;
+           
+                createdPath = Directory.CreateDirectory ( path ).ToString();
+                return true;
         }
 
         /// <summary>
@@ -57,27 +60,36 @@ namespace WGPackages.JsonWrapperForUnity
         /// <param name="pathRoot"></param>
         /// <param name="overwrite"></param>
         /// <returns></returns>
-        public static string SaveToJson<T> ( T objectToSerialize, string fileUniqueNamePart, string pathRoot = "", bool overwrite = false )
+        public static string SaveToJson<T> ( 
+            T objectToSerialize, 
+            string fileUniqueNamePart, 
+            string aditionalPathPart = "", 
+            bool overwrite = false )
         {
-            string path = GetPath<T> ( fileUniqueNamePart, pathRoot );
-            if ( File.Exists ( path ) && !overwrite )
-                throw new System.FormatException ( "File Exists! Use Overwrite parameter!" );
+            string directoryPath = RelativeDirectoryPath ( aditionalPathPart );
+            string filePath = GetPath<T> ( aditionalPathPart, fileUniqueNamePart );
 
-            TryToMakePath ( GetDirectoryPath ( pathRoot ) );
-
-            if ( !Directory.Exists ( GetDirectoryPath ( pathRoot ) ) )
-                throw new System.FormatException ( "Directory does not exist!"+ GetDirectoryPath ( pathRoot ) );
+            if ( File.Exists ( filePath ) && !overwrite )
+                throw new System.FormatException (
+                     @"Cannot save file to this location 
+                     because File already Exists! Use Overwrite parameter!" );
+            bool de = Directory.Exists ( directoryPath );
+            if ( !de &
+            !TryToMakePathDirectory ( directoryPath, out directoryPath ) )
+                throw new System.FormatException(@"Cannot create directory at path " + directoryPath );
 
             string json = JsonConvert.SerializeObject ( objectToSerialize, SERIALIZER_SETTINGS );
-            // TODO : Use using
-            var stream = new FileStream ( path, FileMode.Create );
-            byte[] info = new UTF8Encoding ( true ).GetBytes ( json );
-            stream.Write ( info, 0, info.Length );
-            stream.Close ();
+            
+            using(var stream = new FileStream ( filePath, FileMode.Create ))
+            {
+                byte[] info = new UTF8Encoding ( true ).GetBytes ( json );
+                stream.Write ( info, 0, info.Length );
+                stream.Close();
+            }
 #if UNITY_EDITOR
             AssetDatabase.Refresh ();
 #endif
-            return path;
+            return filePath;
         }
 
         /// <summary>
