@@ -97,20 +97,27 @@ namespace WGUnityPackages.JsonWrapperForUnity
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static object LoadFromJson ( string path )
+        public static object LoadFromJson( string path )
         {
-            if ( string.IsNullOrEmpty ( path ) )
-                throw new System.FormatException ( "Path is Empty!" );
-
+            if ( string.IsNullOrEmpty ( path ))
+            {
+                Debug.LogWarning(string.Format("Path {0} is empty", path));
+                return null;
+            }
             if ( !File.Exists ( path ) )
-                throw new System.FormatException ( "Path is not a file!" );
-            //TODO : Use using
-            var stream = new FileStream ( path, FileMode.Open );
-            TextReader tr = new StreamReader ( stream );
-            var deserializedProduct = JsonConvert.DeserializeObject ( tr.ReadToEnd (), SERIALIZER_SETTINGS );
-            stream.Close ();
-            tr.Close ();
-            return deserializedProduct;
+            {
+                Debug.LogWarning(string.Format ("Path {0} is not a file.", path));
+                return null;
+            }    
+
+            using(var stream  = new FileStream ( path, FileMode.Open ))
+            {
+                TextReader tr = new StreamReader ( stream );
+                var deserializedProduct = JsonConvert.DeserializeObject ( tr.ReadToEnd (), SERIALIZER_SETTINGS );
+                stream.Close ();
+                tr.Close ();
+                return deserializedProduct;
+            }
         }
     }
 }

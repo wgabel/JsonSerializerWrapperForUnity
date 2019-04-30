@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace WGUnityPackages.JsonWrapperForUnity.Tests
 {
-    public class Apple : Fruit
+    public class PlantClump : Plant
     {
-        
+        public List<Plant> plantsInClump;
     }
 }

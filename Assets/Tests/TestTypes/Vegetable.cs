@@ -6,7 +6,7 @@ namespace WGUnityPackages.JsonWrapperForUnity.Tests
 {
     public class Vegetable : Plant
     {
-
+        public float marketValue;
     }
 }
 
