@@ -150,7 +150,6 @@ namespace WGUnityPackages.JsonWrapperForUnity.Tests
             Assert.IsNotNull(clump.plantsInClump[2]);
             Assert.IsInstanceOf(typeof(Vegetable), clump.plantsInClump[2]);
             Assert.AreEqual(clump.plantsInClump[2].plantName, "innerVegetable" );
-
         }
     }
 }
