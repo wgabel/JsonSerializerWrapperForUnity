@@ -52,14 +52,18 @@ namespace WGUnityPackages.JsonWrapperForUnity
         }
 
         /// <summary>
-        /// 
+        /// Saves object to a file with JSON string representation of that object.
+        /// It supports derived types, properties and collections.
+        /// This tool does some basic path validation.null If the path is not valid, it will return null.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="objectToSerialize"></param>
-        /// <param name="fileUniqueNamePart"></param>
-        /// <param name="pathRoot"></param>
-        /// <param name="overwrite"></param>
+        /// <param name="objectToSerialize">Instance of the object that will be serialized</param>
+        /// <param name="fileUniqueNamePart">String that will be used to name the saved file.</param>
+        /// <param name="aditionalPathPart">Relative path for the file to be saved. 
+        /// The default directory is the project's root directory\Assets. </param>
+        /// <param name="overwrite">Should the file be overwritten if found.</param>
         /// <returns></returns>
+        /// <exception cref="System.NullReferenceException">Method will return null if the path is not valid.</exception>
         public static string SaveToJson<T> ( 
             T objectToSerialize, 
             string fileUniqueNamePart, 
@@ -93,7 +97,11 @@ namespace WGUnityPackages.JsonWrapperForUnity
         }
 
         /// <summary>
-        /// 
+        /// Loads objects from a file path. The path is absolute, eg 
+        ///  C:\MyProject\Assets\Monsters\{monster-File-Name}.json
+        /// The filepath needs to be of JSON format.
+        /// It uses TypeNameHandling.All so any changes to namespaces will make the
+        /// previous namespace json obsolete and unusable.
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
