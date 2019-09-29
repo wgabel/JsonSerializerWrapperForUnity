@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace WGUnityPackages.JsonWrapperForUnity.Tests
+namespace WGUnityPackages.JsonWrapperForUnity.Tests.Gardening
 {
     public class Plant
     {

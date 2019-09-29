@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace WGUnityPackages.JsonWrapperForUnity.Tests
+namespace WGUnityPackages.JsonWrapperForUnity.Tests.Gardening
 {
     public class Vegetable : Plant
     {
