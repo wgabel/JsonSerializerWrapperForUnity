@@ -15,6 +15,7 @@ For example:
 
 ```BaseSerializer.SaveToJson ( apple, "redApple", @"Plants\Apples", true );```
 
+```var loadedFruit = BaseSerializer.LoadFromJson ( pathToFruitJsonFile );```
 
 Example 1:
 
