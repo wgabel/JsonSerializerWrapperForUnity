@@ -15,6 +15,8 @@ For example:
 
 ```BaseSerializer.SaveToJson ( apple, "redApple", @"Plants\Apples", true );```
 
+And to load an object:
+
 ```var loadedFruit = BaseSerializer.LoadFromJson ( pathToFruitJsonFile );```
 
 Example 1:
@@ -23,21 +25,21 @@ Lets make some POCO's with some nesting:
 ```
 namespace TestPackage.Gardening
 {	
-    public class Plant
-    {
-        public string plantName;
-    }
-	
+	public class Plant
+	{
+		public string plantName;
+	}
+
 	public class Fruit : Plant
-    {
-        public float tasteValue;
-    }
-	
+	{
+		public float tasteValue;
+	}
+
 	public class Apple : Fruit
-    {
-        public Colors color; 
-    }
-	
+	{
+		public Colors color; 
+	}
+
 	public enum Colors {red, green, blue}
 }
 ```
